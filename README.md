@@ -21,7 +21,10 @@ helm repo update
 Helm install [RELEASE_NAME] exim4/exim4 
 
 # Install with --set values
-Helm install [RELEASE_NAME] --set secrets.SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd' exim4/exim4 
+Helm install [RELEASE_NAME] --set secrets.EXIM_SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd' exim4/exim4 
+
+# or upgrade with --set values
+helm upgrade --set secrets.EXIM_SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd',secrets.EXIM_ALLOWED_SENDERS='*' exim4 exim4/exim4
 ```
 
 ## Environment
@@ -32,6 +35,27 @@ exim4 provides the following environment variables
 * EXIM_PASSWORD - authenticating to a remote host as a client.
 * EXIM\_ALLOWED\_SENDERS - allowed sender IP/Network addresses (default=172.17.0.0/24:127.0.0.1)
 * EXIM\_MESSAGE\_SIZE\_LIMIT - overwrites the default message_size_limit of 50m 
+
+## Debugging
+
+Once the pod is running
+
+```bash
+# execute shell 
+kubectl exec -it exim4-6ff546fb9f-ff47m -- bash
+
+# send a test mail
+echo "This is test" | mail -s "The subject" reciever@myhost.com -aFrom:sender@myhost.com
+```
+
+## Usage
+
+Use your deployed exim4 to send mails, 
+e.g. connect from a another service.
+
+```bash
+SMTP_HOST=exim4.default.svc.cluster.local
+```
 
 ## local helm install
 ```bash
