@@ -24,6 +24,15 @@ Helm install [RELEASE_NAME] exim4/exim4
 Helm install [RELEASE_NAME] --set secrets.SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd' exim4/exim4 
 ```
 
+## Environment
+
+exim4 provides the following environment variables
+
+* EXIM_SMARTHOST - your target mail server 
+* EXIM_PASSWORD - authenticating to a remote host as a client.
+* EXIM\_ALLOWED\_SENDERS - allowed sender IP/Network addresses (default=172.17.0.0/24:127.0.0.1)
+* EXIM\_MESSAGE\_SIZE\_LIMIT - overwrites the default message_size_limit of 50m 
+
 ## local helm install
 ```bash
 helm install exim4 Charts/exim4/ --dry-run
