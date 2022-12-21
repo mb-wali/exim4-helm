@@ -71,21 +71,42 @@ ingress:
   ## - name: USERNAME
   ##   valueFrom:
   ##     secretKeyRef:
-  ##       name: mysecret
-  ##       key: username
+  ##       name: exim4
+  ##       key: EXIM_SMARTHOST
 env:
 - name: EXIM_SMARTHOST
-  value: "localhost"
+  valueFrom:
+    secretKeyRef:
+      name: exim4
+      key: EXIM_SMARTHOST
 - name: EXIM_PASSWORD
-  value: "password"
+  valueFrom:
+    secretKeyRef:
+      name: exim4
+      key: EXIM_PASSWORD
 - name: EXIM_ALLOWED_SENDERS
-  value: "*"
+  valueFrom:
+    secretKeyRef:
+      name: exim4
+      key: EXIM_ALLOWED_SENDERS
 - name: EXIM_MESSAGE_SIZE_LIMIT
-  value: 255M
+  valueFrom:
+    secretKeyRef:
+      name: exim4
+      key: EXIM_MESSAGE_SIZE_LIMIT
 - name: EXIM_DOMAIN
-  value: "localhost"
+  valueFrom:
+    secretKeyRef:
+      name: exim4
+      key: EXIM_DOMAIN
 
 
+secrets:
+  EXIM_SMARTHOST: "my.host.come"
+  EXIM_PASSWORD:  "mypassword"
+  EXIM_ALLOWED_SENDERS: "127.0.0.1"
+  EXIM_DOMAIN: "mysite.com"
+  EXIM_MESSAGE_SIZE_LIMIT: 255M 
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
