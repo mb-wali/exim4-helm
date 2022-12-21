@@ -104,7 +104,7 @@ env:
 secrets:
   EXIM_SMARTHOST: "my.host.come"
   EXIM_PASSWORD:  "mypassword"
-  EXIM_ALLOWED_SENDERS: "*"
+  EXIM_ALLOWED_SENDERS: "172.17.0.0/24:127.0.0.1"
   EXIM_DOMAIN: "mysite.com"
   EXIM_MESSAGE_SIZE_LIMIT: 255M 
 

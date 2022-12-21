@@ -18,13 +18,10 @@ helm repo update
 ## Install Chart
 
 ```bash
-Helm install [RELEASE_NAME] exim4/exim4 
+helm install [RELEASE_NAME] exim4/exim4 --namespace [NAMESPACE] --create-namespace --wait
 
 # Install with --set values
-Helm install [RELEASE_NAME] --set secrets.EXIM_SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd' exim4/exim4 
-
-# or upgrade with --set values
-helm upgrade --set secrets.EXIM_SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd',secrets.EXIM_ALLOWED_SENDERS='*' exim4 exim4/exim4
+helm install exim4 --set secrets.EXIM_SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd',secrets.EXIM_ALLOWED_SENDERS='*' exim4/exim4 --namespace mail --create-namespace --wait
 ```
 
 ## Environment
@@ -34,7 +31,7 @@ exim4 provides the following environment variables
 * EXIM_SMARTHOST - your target mail server 
 * EXIM_PASSWORD - authenticating to a remote host as a client.
 * EXIM\_ALLOWED\_SENDERS - allowed sender IP/Network addresses (default=172.17.0.0/24:127.0.0.1)
-* EXIM\_MESSAGE\_SIZE\_LIMIT - overwrites the default message_size_limit of 50m 
+* EXIM\_MESSAGE\_SIZE\_LIMIT - overwrites the default message_size_limit of 50m (default=255M) 
 
 ## Debugging
 
