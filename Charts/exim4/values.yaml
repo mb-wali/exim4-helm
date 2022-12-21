@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: imixs/exim4
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -37,8 +37,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
+  name: smtp
   type: ClusterIP
-  port: 80
+  port: 25
 
 ingress:
   enabled: false
@@ -55,6 +56,36 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+# env: []
+  ## Required container environment variables
+  ##
+  ## You specify this manually like you would a raw deployment manifest.
+  ## This means you can bind in environment variables from secrets.
+  ##
+  ## e.g. static environment variable:
+  ##  - name: DEMO_GREETING
+  ##    value: "Hello from the environment"
+  ##
+  ## e.g. secret environment variable:
+  ## - name: USERNAME
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: mysecret
+  ##       key: username
+env:
+- name: EXIM_SMARTHOST
+  value: "localhost"
+- name: EXIM_PASSWORD
+  value: "password"
+- name: EXIM_ALLOWED_SENDERS
+  value: "*"
+- name: EXIM_MESSAGE_SIZE_LIMIT
+  value: 255M
+- name: EXIM_DOMAIN
+  value: "localhost"
+
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
