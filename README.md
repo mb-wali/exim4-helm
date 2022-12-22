@@ -51,10 +51,11 @@ Use your deployed exim4 to send mails,
 e.g. connect from a another service.
 
 ```bash
-SMTP_HOST=exim4.default.svc.cluster.local
+SMTP_HOST=exim4.mail.svc.cluster.local
 ```
 
-## local helm install
+## helm install [local]
+
 ```bash
-helm install exim4 Charts/exim4/ --dry-run
+helm install exim4 Charts/exim4/ --namespace mail --create-namespace --wait --dry-run
 ```
