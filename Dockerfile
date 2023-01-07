@@ -18,11 +18,12 @@ RUN apt-get update \
  && ln -sf /dev/stderr /var/log/exim4/reject \
  && chmod 0755 /usr/sbin/exim4
 
+# give permissions
+RUN chmod -R 777 /etc/exim4/ /var/lib/exim4/ /var/log/exim4/ 
+# RUN chmod -R o-rwx /etc/exim4 /var/lib/exim4 /var/log/exim4
+
 
 # add the exim4 start script
-RUN chown -R onetime /etc/exim4 /var/lib/exim4 /var/log/exim4 
-RUN chmod -R o-rwx /etc/exim4 /var/lib/exim4 /var/log/exim4
-
 ADD start.sh /exim_start
 RUN chmod +x /exim_start
 
