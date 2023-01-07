@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: imixs/exim4
+  repository: mbwali/exim4
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "rootless"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -28,13 +28,14 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
+#securityContext: {}
+securityContext:
+  capabilities:
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
-  # runAsUser: 1000
+  runAsUser: 1000
 
 service:
   name: smtp
