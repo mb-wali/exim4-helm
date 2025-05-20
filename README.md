@@ -8,54 +8,72 @@ The MTA is based on [Exim4](https://www.exim.org/). The Image was inspired by th
 - Kubernetes 1.16+
 - Helm 3.7+
 
-## Get Repository Info
+## Add Helm Repository
 
-```console
+```bash
 helm repo add exim4 https://mb-wali.github.io/exim4-helm
 helm repo update
 ```
 
-## Install Chart
+## Installing the Chart
+### Basic Installation
 
 ```bash
-helm install [RELEASE_NAME] exim4/exim4 --namespace [NAMESPACE] --create-namespace --wait
-
-# Install with --set values
-helm install exim4 --set secrets.EXIM_SMARTHOST='localhost',secrets.EXIM_PASSWORD='passw0rd',secrets.EXIM_ALLOWED_SENDERS='*' exim4/exim4 --namespace mail --create-namespace --wait
+helm install [RELEASE_NAME] exim4/exim4 \
+  --namespace [NAMESPACE] \
+  --create-namespace \
+  --wait
 ```
 
-## Environment
+### Installation with Custom Values
 
-exim4 provides the following environment variables
+```
+helm install exim4 exim4/exim4 \
+  --namespace mail \
+  --create-namespace \
+  --wait \
+  --set secrets.EXIM_SMARTHOST='localhost' \
+  --set secrets.EXIM_PASSWORD='passw0rd' \
+  --set secrets.EXIM_ALLOWED_SENDERS='*'
+```
 
-* EXIM_SMARTHOST - your target mail server 
-* EXIM_PASSWORD - authenticating to a remote host as a client.
-* EXIM\_ALLOWED\_SENDERS - allowed sender IP/Network addresses (default=172.17.0.0/24:127.0.0.1)
-* EXIM\_MESSAGE\_SIZE\_LIMIT - overwrites the default message_size_limit of 50m (default=255M) 
+## Configuration
+
+The following environment variables can be configured via Helm values:
+
+| Environment Variable       | Description                                                                  | Default                    |
+|----------------------------|------------------------------------------------------------------------------|----------------------------|
+| `EXIM_SMARTHOST`           | Address of the target mail server                                            | *(required)*               |
+| `EXIM_PASSWORD`            | Password for authenticating to the remote smarthost                          | *(required if needed)*     |
+| `EXIM_ALLOWED_SENDERS`     | Allowed sender IP addresses or CIDR networks                                 | `172.17.0.0/24:127.0.0.1`  |
+| `EXIM_MESSAGE_SIZE_LIMIT`  | Overrides the default message size limit (default is 50M). Example: `255M`   | `255M`                     |
+
 
 ## Debugging
 
-Once the pod is running
+Once the pod is running, you can troubleshoot or test it with the following commands:
 
 ```bash
-# execute shell 
+# Start an interactive shell in the Exim4 pod
 kubectl exec -it exim4-6ff546fb9f-ff47m -- bash
 
-# send a test mail
+# Example: Send a test email
 echo "This is test" | mail -s "The subject" reciever@myhost.com -aFrom:sender@myhost.com
 ```
 
 ## Usage
-
-Use your deployed exim4 to send mails, 
-e.g. connect from a another service.
+Use the deployed Exim4 instance as your SMTP relay from other services within the cluster:
 
 ```bash
 SMTP_HOST=exim4.mail.svc.cluster.local
 ```
 
-## helm install [local]
+## Local Installation for Testing
 
 ```bash
-helm install exim4 Charts/exim4/ --namespace mail --create-namespace --wait --dry-run
+helm install exim4 Charts/exim4/ \
+  --namespace mail \
+  --create-namespace \
+  --wait \
+  --dry-run
 ```
